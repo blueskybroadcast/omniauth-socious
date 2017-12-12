@@ -93,7 +93,7 @@ module OmniAuth
 
           parsed_response = JSON.parse response.body
 
-          if parsed_response['inactive'].to_s != '1'
+          if parsed_response['inactive'].to_s != '0'
             error_message = 'Socious SSO: User is inactive'
             Rails.logger.error error_message
             @app_event.logs.create(level: 'error', text: error_message)
