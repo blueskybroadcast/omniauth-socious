@@ -90,10 +90,9 @@ module OmniAuth
           response_log = "Socious Get User Info Response (code: #{response.code}):\n#{response.body}"
           Rails.logger.warn response_log
           @app_event.logs.create(level: 'info', text: response_log)
+          parsed_user_info = JSON.parse(response.body).deep_stringify_keys['users'].first
 
-          parsed_response = JSON.parse response.body
-
-          if parsed_response['inactive'].to_s != '0'
+          if parsed_user_info['inactive'].to_s != '0'
             error_message = 'Socious SSO: User is inactive'
             Rails.logger.error error_message
             @app_event.logs.create(level: 'error', text: error_message)
@@ -102,12 +101,12 @@ module OmniAuth
           end
 
           {
-            uid: parsed_response['user_id'].to_s,
-            first_name: parsed_response['fname'],
-            last_name: parsed_response['lname'],
-            email: parsed_response['email'],
-            username: parsed_response['user_id'],
-            membership: parsed_response['membership']
+            uid: parsed_user_info['user_id'].to_s,
+            first_name: parsed_user_info['fname'],
+            last_name: parsed_user_info['lname'],
+            email: parsed_user_info['email'],
+            username: parsed_user_info['user_id'],
+            membership: parsed_user_info['membership']
           }
         else
           error_message = "Socious Get user info failure (code: #{response.code}):\n#{response.body}"
