@@ -10,7 +10,8 @@ module OmniAuth
         domain: 'MUST BE PROVIDED',
         sso_token: 'MUST BE PROVIDED',
         sso_key: 'MUST BE PROVIDED',
-        access_token: 'MUST BE PROVIDED'
+        access_token: 'MUST BE PROVIDED',
+        username_prefix: nil
       }
 
       uid { info[:uid] }
@@ -105,7 +106,7 @@ module OmniAuth
             first_name: parsed_user_info['fname'],
             last_name: parsed_user_info['lname'],
             email: parsed_user_info['email'],
-            username: parsed_user_info['user_id'],
+            username: "#{options.client_options.username_prefix}#{parsed_user_info['user_id']}",
             membership: parsed_user_info['membership']
           }
         else
